@@ -1,0 +1,3 @@
+[functions.send-email-notification]
+verify_jwt = true
+entrypoint = "./functions/send-email-notification/index.ts"
