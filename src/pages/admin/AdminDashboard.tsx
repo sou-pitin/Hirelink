@@ -169,9 +169,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard icon={Users} label="Total Users" value={stats.totalUsers} color="primary" />
             <StatCard icon={Briefcase} label="Total Jobs" value={stats.totalJobs} color="accent" />
-            <div onClick={() => setTab('jobs')} className="cursor-pointer transition-transform hover:scale-[1.02]">
-              <StatCard icon={Clock} label="Pending Jobs" value={stats.pendingJobs} color="warning" highlight={stats.pendingJobs > 0} />
-            </div>
+            <StatCard icon={Clock} label="Pending Jobs" value={stats.pendingJobs} color="warning" highlight={stats.pendingJobs > 0} />
             <StatCard icon={FileText} label="Applications" value={stats.totalApplications} color="gray" />
           </div>
 
@@ -366,7 +364,10 @@ export default function AdminDashboard() {
           ) : (
             <div className="space-y-3">
               {allJobs.map((job) => {
-                const badge: Record<JobStatus, { class: string; label: string }> = {
+                const badge: Record<string, { class: string; label: string }> = {
+                  active: { class: 'badge-success', label: 'Active' },
+                  draft: { class: 'badge-neutral', label: 'Draft' },
+                  closed: { class: 'badge-neutral', label: 'Closed' },
                   approved: { class: 'badge-success', label: 'Approved' },
                   pending: { class: 'badge-warning', label: 'Pending' },
                   rejected: { class: 'badge-error', label: 'Rejected' },
@@ -377,7 +378,7 @@ export default function AdminDashboard() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="font-semibold text-sm text-gray-900 truncate">{job.title}</h3>
-                        <span className={badge[job.status].class}>{badge[job.status].label}</span>
+                        <span className={(badge[job.status] ?? badge.removed).class}>{(badge[job.status] ?? badge.removed).label}</span>
                       </div>
                       <p className="text-xs text-gray-500">{job.company} · {job.location || 'Remote'}</p>
                       <p className="text-xs text-gray-400 mt-1">Posted {timeAgo(job.created_at)}</p>
